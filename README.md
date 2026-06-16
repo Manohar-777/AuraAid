@@ -14,6 +14,17 @@ AuraAid is an interactive, premium first-aid assistant and emergency medical gui
 
 ---
 
+##  Screenshots
+
+<img width="1910" height="963" alt="image" src="https://github.com/user-attachments/assets/ca2643c9-7aa0-4ecf-aeb5-81ba3129bf64" />
+
+<img width="1919" height="967" alt="image" src="https://github.com/user-attachments/assets/8bc5e441-2695-4fad-8b1a-9bac7f9b7040" />
+
+<img width="1919" height="960" alt="image" src="https://github.com/user-attachments/assets/ce63cf15-0c0e-4d7d-a4dc-ec4f64b34618" />
+
+---
+
+
 ## 🛠️ Tech Stack
 
 - **Framework**: React 19 (TypeScript)

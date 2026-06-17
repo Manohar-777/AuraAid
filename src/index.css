@@ -94,6 +94,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 /* Emergency Banner */
@@ -108,6 +110,8 @@ body {
   gap: 12px;
   box-shadow: 0 4px 20px rgba(239, 68, 68, 0.25);
   z-index: 100;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .banner-content {
@@ -126,6 +130,7 @@ body {
 .emergency-hotlines {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .hotline-btn {
@@ -255,7 +260,7 @@ body {
 
 .quick-actions-buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
 }
 
@@ -417,13 +422,22 @@ body {
 /* Dashboard Grid Layout */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1.9fr;
+  grid-template-columns: 1fr 1.6fr;
   gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 1.4fr;
+    gap: 18px;
+  }
 }
 
 @media (max-width: 900px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
@@ -435,208 +449,218 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  max-width: 100%;
 }
 
-/* BodyMap Component styling */
+/* ═══════════════════════════════════════════════════════════════
+   BodyMap Component – Remodeled Layout
+   ═══════════════════════════════════════════════════════════════ */
 .body-map-container {
-  padding: 24px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  align-items: center;
+  gap: 16px;
   height: 100%;
 }
 
 .body-map-header {
-  text-align: center;
+  text-align: left;
   width: 100%;
+}
+
+.body-map-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.body-map-icon {
+  color: var(--primary);
+  flex-shrink: 0;
 }
 
 .body-map-header h3 {
   font-weight: 700;
-  font-size: 1.15rem;
-  margin-bottom: 4px;
+  font-size: 1.1rem;
   color: var(--text-primary);
+  letter-spacing: -0.2px;
 }
 
 .body-map-header .subtitle {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-secondary);
+  line-height: 1.4;
 }
 
-.body-map-visualizer {
+/* 3D Model Wrapper — proportional container */
+.body-model-wrapper {
   position: relative;
-  width: 250px;
-  height: 520px;
-  background: #090e17;
-  border: 1px solid rgba(6, 182, 212, 0.15);
-  border-radius: 14px;
-  overflow: hidden;
+  width: 100%;
+  flex: 1;
+  min-height: 420px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.6);
+  flex-direction: column;
 }
 
-.scan-grid {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: 20px 20px;
-  background-image: 
-    linear-gradient(to right, rgba(6, 182, 212, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(6, 182, 212, 0.04) 1px, transparent 1px);
-  z-index: 1;
-}
-
-.scanner-line {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--primary), transparent);
-  box-shadow: 0 0 12px var(--primary);
-  opacity: 0.45;
-  z-index: 2;
-  animation: scan 8s linear infinite;
-  pointer-events: none;
-}
-
-.anatomy-svg {
-  width: 90%;
-  height: 90%;
-  z-index: 3;
-}
-
-.body-outline-backdrop {
-  pointer-events: none;
-}
-
-/* SVG Body Parts styling */
-.body-part-path, .body-part-group path {
-  fill: rgba(6, 182, 212, 0.04);
-  stroke: rgba(6, 182, 212, 0.25);
-  stroke-width: 2;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  stroke-linejoin: round;
-}
-
-.body-part-path:hover, .body-part-group:hover path {
-  fill: rgba(6, 182, 212, 0.18);
-  stroke: var(--primary);
-  stroke-width: 2.5;
-}
-
-.body-part-path.selected, .body-part-group.selected path {
-  fill: rgba(239, 68, 68, 0.25);
-  stroke: var(--danger);
-  stroke-width: 3;
-}
-
-/* Anatomy Tooltip */
-.anatomy-tooltip {
+/* Selected Part Indicator Overlay */
+.selected-part-indicator {
   position: absolute;
   bottom: 12px;
   left: 12px;
   right: 12px;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(6, 10, 20, 0.92);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
   padding: 10px 14px;
-  z-index: 5;
-  backdrop-filter: blur(8px);
-  transition: all 0.3s ease;
-  pointer-events: none;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.1), inset 0 0 15px rgba(239, 68, 68, 0.03);
+  animation: fadeSlideUp 0.3s ease-out;
 }
 
-.anatomy-tooltip.visible {
-  border-color: var(--border-glow);
-  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.1);
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.tooltip-glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--primary);
+.selected-part-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
 }
 
-.anatomy-tooltip.visible .tooltip-glow {
-  background: var(--primary);
+.selected-part-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
 }
 
-.anatomy-tooltip.visible:has(.selected) .tooltip-glow {
-  background: var(--danger);
-}
-
-.tooltip-title {
+.selected-part-name {
   font-weight: 700;
   font-size: 0.85rem;
   color: var(--text-primary);
-  margin-bottom: 2px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  letter-spacing: 0.2px;
 }
 
-.scan-icon {
+.selected-part-desc {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deselect-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.deselect-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: white;
+}
+
+/* Manual Selector Section – Collapsible */
+.manual-selector-section {
+  width: 100%;
+}
+
+.manual-selector-toggle {
+  width: 100%;
+  background: rgba(30, 41, 59, 0.2);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+}
+
+.manual-selector-toggle:hover {
+  background: rgba(30, 41, 59, 0.4);
+  color: var(--text-primary);
+  border-color: rgba(6, 182, 212, 0.2);
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-dot {
   width: 6px;
   height: 6px;
   background: var(--primary);
   border-radius: 50%;
-  display: inline-block;
-  animation: flash 1s infinite;
-}
-
-.tooltip-desc {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-  line-height: 1.3;
-}
-
-.tooltip-hint {
-  font-size: 0.65rem;
-  color: var(--primary);
-  font-weight: 600;
-  margin-top: 4px;
-  letter-spacing: 0.2px;
-  text-transform: uppercase;
-}
-
-.tooltip-idle {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  text-align: center;
-  padding: 4px 0;
+  animation: flash 2s infinite;
 }
 
 .manual-selector-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 6px;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 8px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.25s ease,
+              margin-top 0.25s ease;
+}
+
+.manual-selector-grid.expanded {
+  max-height: 600px;
+  opacity: 1;
+  margin-top: 8px;
 }
 
 .manual-part-btn {
-  background: rgba(30, 41, 59, 0.3);
+  background: rgba(30, 41, 59, 0.2);
   border: 1px solid var(--border-light);
   border-radius: 8px;
-  padding: 8px;
+  padding: 8px 10px;
   color: var(--text-secondary);
   font-family: inherit;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .manual-part-btn:hover {
@@ -646,31 +670,28 @@ body {
 }
 
 .manual-part-btn.active {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(239, 68, 68, 0.12);
   color: white;
-  border-color: var(--danger);
+  border-color: rgba(239, 68, 68, 0.4);
   font-weight: 600;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.08);
 }
 
-.manual-part-btn .dot {
-  width: 6px;
-  height: 6px;
-  background: var(--text-muted);
-  border-radius: 50%;
+.part-emoji {
+  font-size: 0.9rem;
+  flex-shrink: 0;
 }
 
-.manual-part-btn:hover .dot {
-  background: var(--primary);
-}
-
-.manual-part-btn.active .dot {
-  background: var(--danger);
-  box-shadow: 0 0 6px var(--danger);
+.part-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Instruction Viewer Component styling */
 .panel-right {
   min-height: 520px;
+  overflow: hidden;
+  word-break: break-word;
 }
 
 .viewer-empty-placeholder {
@@ -1758,11 +1779,13 @@ body {
 .body-model-3d-container {
   position: relative;
   width: 100%;
-  height: 480px;
+  height: 100%;
+  min-height: 420px;
   border-radius: 14px;
   overflow: hidden;
   border: 1px solid rgba(6, 182, 212, 0.15);
   box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+  flex: 1;
 }
 
 .canvas-gradient-bg {
@@ -1871,24 +1894,6 @@ body {
   box-shadow: 0 0 4px var(--primary);
 }
 
-/* Responsive adjustments for 3D canvas */
-@media (max-width: 900px) {
-  .body-model-3d-container {
-    height: 380px;
-  }
-}
-
-@media (max-width: 600px) {
-  .body-model-3d-container {
-    height: 320px;
-  }
-  
-  .view-toggle-btn {
-    font-size: 0.65rem;
-    padding: 4px 10px;
-  }
-}
-
 /* Sci-fi diagnostic loader styles */
 .sci-fi-loader-container {
   display: flex;
@@ -1990,5 +1995,428 @@ body {
   100% { transform: scale(1.6); opacity: 0; }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   COMPREHENSIVE RESPONSIVE / MOBILE STYLES
+   ═══════════════════════════════════════════════════════════════ */
 
+/* Tablet: 768px–1024px */
+@media (max-width: 1024px) {
+  .app-main {
+    width: 94%;
+    padding: 20px 0 36px;
+    gap: 18px;
+  }
 
+  .body-model-wrapper {
+    min-height: 380px;
+  }
+
+  .body-model-3d-container {
+    min-height: 380px;
+  }
+}
+
+/* Small tablets / large phones: 600px–900px */
+@media (max-width: 900px) {
+  .emergency-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  .banner-content {
+    font-size: 0.82rem;
+  }
+
+  .emergency-hotlines {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .app-header {
+    padding: 18px 4% 10px;
+  }
+
+  .logo-text h1 {
+    font-size: 1.3rem;
+  }
+
+  .logo-text h1 span {
+    font-size: 0.65rem;
+    padding: 1px 5px;
+  }
+
+  .quick-actions-buttons {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .body-map-container {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .body-model-wrapper {
+    min-height: 360px;
+  }
+
+  .body-model-3d-container {
+    min-height: 360px;
+  }
+
+  .manual-selector-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .panel-right {
+    min-height: auto;
+  }
+
+  .rag-metrics {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile: ≤600px */
+@media (max-width: 600px) {
+  .app-main {
+    width: 96%;
+    padding: 14px 0 30px;
+    gap: 14px;
+  }
+
+  .emergency-banner {
+    padding: 8px 12px;
+    gap: 6px;
+  }
+
+  .banner-content {
+    font-size: 0.75rem;
+    gap: 6px;
+  }
+
+  .banner-content span {
+    line-height: 1.3;
+  }
+
+  .emergency-hotlines {
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .hotline-btn {
+    padding: 4px 8px;
+    font-size: 0.78rem;
+  }
+
+  .app-header {
+    padding: 14px 4% 10px;
+  }
+
+  .header-logo {
+    gap: 10px;
+  }
+
+  .logo-icon-wrapper {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+  }
+
+  .logo-text h1 {
+    font-size: 1.15rem;
+    flex-wrap: wrap;
+  }
+
+  .logo-text h1 span {
+    font-size: 0.6rem;
+  }
+
+  .logo-text p {
+    font-size: 0.78rem;
+  }
+
+  /* Quick Actions */
+  .quick-actions-card {
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .quick-actions-buttons {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .quick-action-btn {
+    padding: 12px 14px;
+    font-size: 0.88rem;
+    border-radius: 10px;
+  }
+
+  /* Search */
+  .search-input {
+    padding: 12px 40px 12px 44px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+  }
+
+  .search-icon {
+    left: 14px;
+  }
+
+  .search-clear-btn {
+    right: 12px;
+  }
+
+  .search-suggestions {
+    gap: 8px;
+  }
+
+  .suggestion-pill {
+    padding: 5px 10px;
+    font-size: 0.78rem;
+  }
+
+  /* Body Map & 3D Model */
+  .body-map-container {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .body-map-header h3 {
+    font-size: 1rem;
+  }
+
+  .body-map-header .subtitle {
+    font-size: 0.72rem;
+  }
+
+  .body-model-wrapper {
+    min-height: 320px;
+  }
+
+  .body-model-3d-container {
+    min-height: 320px;
+    border-radius: 10px;
+  }
+
+  .selected-part-indicator {
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    padding: 8px 10px;
+    gap: 8px;
+    border-radius: 8px;
+  }
+
+  .selected-part-name {
+    font-size: 0.78rem;
+  }
+
+  .selected-part-desc {
+    font-size: 0.65rem;
+  }
+
+  .view-toggle-btn {
+    font-size: 0.65rem;
+    padding: 4px 10px;
+  }
+
+  .manual-selector-toggle {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+
+  .manual-selector-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+  }
+
+  .manual-part-btn {
+    padding: 7px 8px;
+    font-size: 0.72rem;
+    gap: 5px;
+  }
+
+  .part-emoji {
+    font-size: 0.8rem;
+  }
+
+  /* Instruction Viewer */
+  .instruction-viewer-card {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .viewer-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .viewer-tabs {
+    gap: 4px;
+  }
+
+  .tab-btn {
+    padding: 8px 10px;
+    font-size: 0.78rem;
+    gap: 5px;
+  }
+
+  .immediate-action-item {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .step-item-card {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  /* RAG Status */
+  .rag-status-card {
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .rag-metrics {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .metric-box {
+    padding: 6px 8px;
+  }
+
+  .metric-label {
+    font-size: 0.62rem;
+  }
+
+  .metric-val {
+    font-size: 0.82rem;
+  }
+
+  .terminal-body {
+    max-height: 120px;
+    font-size: 0.65rem;
+  }
+
+  /* Timers */
+  .emergency-timer-card {
+    padding: 12px;
+  }
+
+  .cpr-pulse-circle {
+    width: 90px;
+    height: 90px;
+  }
+
+  .circular-progress-container {
+    width: 110px;
+    height: 110px;
+  }
+
+  .time-display {
+    font-size: 1.25rem;
+  }
+
+  /* Footer */
+  .app-footer {
+    padding: 24px 4%;
+  }
+
+  .disclaimer-text {
+    font-size: 0.72rem;
+  }
+
+  .footer-credits {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+    font-size: 0.68rem;
+  }
+
+  /* Grid panels */
+  .grid-panel {
+    border-radius: 14px;
+  }
+
+  .viewer-empty-placeholder {
+    min-height: 280px;
+    padding: 24px;
+  }
+
+  .glowing-circle {
+    width: 60px;
+    height: 60px;
+  }
+
+  .placeholder-content h3 {
+    font-size: 1.1rem;
+  }
+
+  .placeholder-content p {
+    font-size: 0.82rem;
+  }
+}
+
+/* Very small phones: ≤400px */
+@media (max-width: 400px) {
+  .app-main {
+    width: 98%;
+  }
+
+  .emergency-banner {
+    padding: 6px 10px;
+  }
+
+  .banner-content {
+    font-size: 0.7rem;
+  }
+
+  .hotline-btn {
+    padding: 3px 6px;
+    font-size: 0.72rem;
+  }
+
+  .logo-text h1 {
+    font-size: 1.05rem;
+  }
+
+  .body-model-wrapper {
+    min-height: 280px;
+  }
+
+  .body-model-3d-container {
+    min-height: 280px;
+  }
+
+  .manual-selector-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+
+  .manual-part-btn {
+    padding: 6px 7px;
+    font-size: 0.68rem;
+  }
+
+  .quick-action-btn {
+    padding: 10px 12px;
+    font-size: 0.82rem;
+  }
+
+  .search-input {
+    padding: 10px 36px 10px 40px;
+    font-size: 0.9rem;
+  }
+
+  .viewer-header h2 {
+    font-size: 1.05rem;
+  }
+
+  .rag-metrics {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px;
+  }
+}

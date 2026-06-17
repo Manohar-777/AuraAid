@@ -43,7 +43,6 @@ export const BODY_PART_LABELS: Record<string, string> = {
     Z: ±0.37
 */
 const MODEL_SCALE = 0.193;
-const MODEL_Y_CENTER = 10.31;  // Original model Y center
 const MODEL_Y_OFFSET = -1.87; // Shifted UP by 0.12 units to perfectly align hotspots to mesh
 
 /* ─── Hotspot positions (in world model space) ─── */
